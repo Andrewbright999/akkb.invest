@@ -1,0 +1,168 @@
+
+
+/* один столбец, как на мобильном макете */
+.login{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  background-color: #121212;
+
+  background-image:
+  url("/static/img/login/wave.svg"),
+  url("/static/img/login/grid.svg");
+
+  background-repeat:
+  no-repeat,
+  repeat;
+
+  background-position:
+  center 102%,
+  center;
+
+  background-size:
+  auto,
+  auto;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+  align-items: stretch;
+  justify-content: stretch;
+  height: 100%;
+  padding: 0;
+
+
+
+  /* wave чуть шире экрана, чтобы выглядело как на скрине */
+  background-size:
+    120% auto,
+    auto;
+}
+
+.right-section{ display: none; }
+
+.left-section{
+  width: 90%;
+  height: 90%;
+  align-items: stretch;
+  justify-content: stretch;
+  /* padding: 26px 56px 26px 32px; */
+}
+
+/* карточку визуально убираем: текст прямо на фоне */
+.login__card{
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+    display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.login_title{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* типографика под мобилку (можешь подогнать размеры под свой макет) */
+.loginTitle{
+  font-size: 52px;
+  line-height: 88%;
+  letter-spacing: -0.04em;
+}
+
+.loginHint{
+  max-width: 320px;
+  font-size: 18px;
+  line-height: 1.15;
+  color: #fff;
+  text-align: left;
+}
+
+/* кнопку/виджет прижимаем вниз */
+.login__footer{
+  margin-top: auto;
+  width: 100%;
+  align-items: stretch;
+}
+
+.loginTg{
+  width: 100%;
+  justify-content: center;
+}
+
+/* лого снизу по центру */
+#akkb-title{
+  bottom: 18px;
+  width: min(320px, 72vw);
+  height: auto;
+  pointer-events: none;
+}
+
+
+
+
+/* ===== Desktop (от 520px) ===== */
+@media (min-width: 520px){
+  .login{
+    min-height: 100svh;
+  }
+
+  #akkb-title{
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+  }
+
+  .left-section{
+    height: 100%;
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .right-section{
+    height: 100%;
+    width: 30%;
+    display: flex;
+  }
+
+  .login__card{
+    width: 420px;
+    max-width: 100%;
+    z-index: 1;
+  }
+
+  .login__cardInner{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    padding: 56px 56px 34px;
+    min-height: 400px;
+  }
+
+  .login__footer{
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .loginTg{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+}

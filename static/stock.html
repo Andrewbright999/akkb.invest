@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Акция</title>
+  <link rel="stylesheet" href="/static/css/stock.css">
+  
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <script>
+    google.charts.load('current', { packages: ['corechart'] });
+  </script>
+</head>
+
+<body>
+  <a href="/">← назад</a>
+  <h2 id="title">Загрузка...</h2>
+
+  <!-- Профиль -->
+  <div id="profile" class="profile"></div>
+
+  <div class="row">
+    <div class="card">
+      <div><b>Тикер:</b> <span id="secid"></span></div>
+      <div><b>Last:</b> <span id="last"></span></div>
+      <div><b>У меня:</b> <span id="myQty">—</span></div>
+      <div class="muted" id="myAvg"></div>
+      <div class="muted" id="status"></div>
+    </div>
+
+    <div class="card">
+      <div style="font-weight:600; margin-bottom:8px;">Сделка</div>
+      <div class="muted" style="margin-bottom:10px;">account_id не нужен — берётся из токена</div>
+
+      <div class="controls" style="margin:0 0 10px;">
+        <label class="muted">Qty:
+          <input id="tradeQty" type="number" step="1" min="1" value="1" style="width:110px;">
+        </label>
+
+      <div class="controls" style="margin:0;">
+        <button id="buyBtn">BUY</button>
+        <button id="sellBtn">SELL</button>
+      </div>
+
+      <div id="tradeMsg" class="muted" style="margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <label>
+      Период:
+      <select id="period">
+        <option value="7d">7 дней</option>
+        <option value="1m">1 месяц</option>
+        <option value="3m" selected>3 месяца</option>
+        <option value="6m">6 месяцев</option>
+        <option value="1y">1 год</option>
+        <option value="ytd">YTD</option>
+        <option value="max">MAX</option>
+      </select>
+    </label>
+
+    <label>
+      График:
+      <select id="chartType">
+        <option value="candles" selected>Свечи</option>
+        <option value="line">Линия (Close)</option>
+      </select>
+    </label>
+
+    <button id="reloadBtn">Обновить</button>
+  </div>
+  <div id="chart_wrap"></div>
+  <script type="module" src="/static/js/stock.js"></script>
+</body>
+</html>

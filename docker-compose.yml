@@ -1,0 +1,17 @@
+services:
+  db:
+    image: mysql:8
+    container_name: akkb_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: akkb
+      MYSQL_USER: akkb
+      MYSQL_PASSWORD: akkb
+    ports:
+      - "3306:3306"   # хост:контейнер (внутри всегда 3306) [web:330]
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

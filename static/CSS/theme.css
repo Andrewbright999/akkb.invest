@@ -1,0 +1,27 @@
+:root{
+  --c-bg: #121212;
+  --c-lime: #D7E82A;
+  --c-white: #ffffff;
+
+  --t-primary: var(--c-white);
+  --t-muted: rgba(255,255,255,.72);
+
+  --r-lg: 28px;
+  --bd-strong: 3px solid var(--c-lime);
+  --sh-card: 0 24px 80px rgba(0,0,0,.55);
+}
+
+html, body { height: 100%; }
+
+body{
+  margin: 0;
+  padding: 0;
+  background: var(--c-bg);
+  color: var(--t-primary);
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+}
+
+h1{
+  margin: 0;
+  padding: 0;
+}

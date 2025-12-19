@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Популярные акции</title>
+
+  <link rel="stylesheet" href="/static/css/app.css">
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+<div id="profile" class="muted" style="margin:12px 0; display:flex; gap:10px; align-items:center;"></div>
+
+<div id="portfolio" class="card" style="margin:12px 0;">
+  <div class="muted">Портфель: загрузка…</div>
+</div>
+<div id="leaderboard" class="card" style="margin:12px 0;">
+  <div class="muted">Рейтинг: загрузка…</div>
+</div>
+
+<h2>Популярные сегодня (по обороту)</h2>
+<div class="muted">Источник: MOEX ISS, доска TQBR</div>
+  <table id="tbl">
+    <thead>
+      <tr>
+        <th>Тикер</th>
+        <th>Компания</th>
+        <th>Last</th>
+        <th>Оборот (VALTODAY)</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script type="module" src="/static/js/index.js"></script>
+</body>
+</html>

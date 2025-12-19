@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AKKB.INVEST — Вход</title>
+
+  <link rel="stylesheet" href="/static/css/theme.css">
+  <link rel="stylesheet" href="/static/css/components.css">
+  <link rel="stylesheet" href="/static/css/login.css">
+
+  <script type="module" src="/static/js/login.js"></script>
+</head>
+
+<body>
+ <main class="login">
+  <div class="left-section">
+    
+    <section class="login__card card">
+          <h1 class="loginTitle">Регистрация<br>и вход</h1>
+          <div class="loginHint">
+            Авторизуйтесь через Telegram<br>для регистрации или входа
+          </div>
+        <div class="login__footer">
+          <div id="tg_btn" class="loginTg">
+            <script async
+              src="https://telegram.org/js/telegram-widget.js?22"
+              data-telegram-login="AKKBTechBOT"
+              data-size="large"
+              data-onauth="onTelegramAuth(user)">
+            </script>
+          </div>
+
+          <div id="msg" class="msg"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+</body>
+</html>
