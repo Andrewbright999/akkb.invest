@@ -1,168 +1,148 @@
+/* Inter Tight через Fontsource CDN */
+@font-face{
+  font-family:"Inter Tight";
+  font-style:normal;
+  font-display:swap;
+  font-weight:400;
+  src:
+    url("https://cdn.jsdelivr.net/fontsource/fonts/inter-tight@latest/latin-400-normal.woff2") format("woff2"),
+    url("https://cdn.jsdelivr.net/fontsource/fonts/inter-tight@latest/latin-400-normal.woff") format("woff");
+} /* CDN-паттерн Fontsource описан в документации [web:46] */
 
+:root{
+  --bg1:#f6f7fb;
+  --bg2:#eef2ff;
 
-/* один столбец, как на мобильном макете */
-.login{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  --card: rgba(255,255,255,.86);
+  --stroke: rgba(15,23,42,.10);
+  --shadow: 0 14px 40px rgba(2,6,23,.10);
 
-  background-color: #121212;
+  --text:#0f172a;
+  --muted: rgba(15,23,42,.64);
 
-  background-image:
-  url("/static/img/login/wave.svg"),
-  url("/static/img/login/grid.svg");
+  --primary:#2563eb;
+  --danger:#ef4444;
+  --ok:#16a34a;
 
-  background-repeat:
-  no-repeat,
-  repeat;
-
-  background-position:
-  center 102%,
-  center;
-
-  background-size:
-  auto,
-  auto;
-
-  overflow-x: hidden;
-  overflow-y: auto;
-  align-items: stretch;
-  justify-content: stretch;
-  height: 100%;
-  padding: 0;
-
-
-
-  /* wave чуть шире экрана, чтобы выглядело как на скрине */
-  background-size:
-    120% auto,
-    auto;
+  --r: 22px;
 }
 
-.right-section{ display: none; }
+*{ box-sizing:border-box; }
+html, body{ height:100%; }
+
+body{
+  margin:0;
+  color:var(--text);
+  background:
+    radial-gradient(900px 520px at 15% 10%, var(--bg2), transparent 60%),
+    radial-gradient(800px 520px at 90% 25%, #e0f2fe, transparent 55%),
+    linear-gradient(180deg, var(--bg1), #ffffff 65%);
+  font-family:"Inter Tight", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Лэйаут */
+.login{
+  min-height: 100svh;
+  display:grid;
+  place-items:center;
+  padding: 20px;
+}
 
 .left-section{
-  width: 90%;
-  height: 90%;
-  align-items: stretch;
-  justify-content: stretch;
-  /* padding: 26px 56px 26px 32px; */
-}
-
-/* карточку визуально убираем: текст прямо на фоне */
-.login__card{
-  display: flex;
   width: 100%;
-  max-width: 100%;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-    display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
+  display:grid;
+  place-items:center;
 }
 
-.login_title{
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 16px;
+/* Карточка */
+.login__card.card{
+  width: min(460px, 100%);
+  padding: 20px;
+  border-radius: var(--r);
+  background: var(--card);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
 }
 
-/* типографика под мобилку (можешь подогнать размеры под свой макет) */
+/* Заголовок */
 .loginTitle{
-  font-size: 52px;
-  line-height: 88%;
-  letter-spacing: -0.04em;
+  margin: 0 0 10px;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, "Inter Tight", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
 }
 
+/* Текст-пояснение */
 .loginHint{
-  max-width: 320px;
-  font-size: 18px;
-  line-height: 1.15;
-  color: #fff;
-  text-align: left;
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.35;
 }
 
-/* кнопку/виджет прижимаем вниз */
+/* Нижняя часть */
 .login__footer{
-  margin-top: auto;
-  width: 100%;
-  align-items: stretch;
+  display:grid;
+  gap: 12px;
 }
 
-.loginTg{
-  width: 100%;
-  justify-content: center;
+/* Контейнер Telegram Widget */
+#tg_btn.loginTg{
+  display:flex;
+  justify-content:center;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--stroke);
+  background: rgba(255,255,255,.62);
+
+  /* Для корректного скругления iframe внутри */
+  overflow:hidden;
+} /* при скруглении iframe часто используют обёртку + overflow:hidden [web:65] */
+
+#tg_btn iframe{
+  display:block;
+  border:0 !important;
 }
 
-/* лого снизу по центру */
-#akkb-title{
-  bottom: 18px;
-  width: min(320px, 72vw);
-  height: auto;
-  pointer-events: none;
+/* Сообщения */
+#msg.msg{
+  min-height: 18px;
+  font-size: 13px;
+  line-height: 1.25;
+  color: var(--muted);
 }
 
+/* Если в JS добавляешь классы статуса */
+#msg.msg.is-error{ color: var(--danger); }
+#msg.msg.is-ok{ color: var(--ok); }
 
+/* Десктоп-улучшения */
+@media (min-width: 768px){
+  .login{ padding: 28px; }
+  .login__card.card{ padding: 24px; }
+  .loginTitle{ font-size: 32px; }
+}
 
+/* Тёмная тема */
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg1:#0b1220;
+    --bg2:#0b1b3a;
 
-/* ===== Desktop (от 520px) ===== */
-@media (min-width: 520px){
-  .login{
-    min-height: 100svh;
+    --card: rgba(15,23,42,.72);
+    --stroke: rgba(148,163,184,.16);
+    --shadow: 0 16px 50px rgba(0,0,0,.35);
+
+    --text:#e5e7eb;
+    --muted: rgba(229,231,235,.70);
   }
 
-  #akkb-title{
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    transform: translateX(-50%);
+  #tg_btn.loginTg{
+    background: rgba(2,6,23,.25);
   }
-
-  .left-section{
-    height: 100%;
-    width: 70%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .right-section{
-    height: 100%;
-    width: 30%;
-    display: flex;
-  }
-
-  .login__card{
-    width: 420px;
-    max-width: 100%;
-    z-index: 1;
-  }
-
-  .login__cardInner{
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-
-    padding: 56px 56px 34px;
-    min-height: 400px;
-  }
-
-  .login__footer{
-    margin-top: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    align-items: center;
-  }
-
-  .loginTg{
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
-
 }

@@ -9,9 +9,10 @@ services:
       MYSQL_USER: akkb
       MYSQL_PASSWORD: akkb
     ports:
-      - "3306:3306"   # хост:контейнер (внутри всегда 3306) [web:330]
+      - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+
   api:
     build: .
     env_file: .env
@@ -32,4 +33,4 @@ services:
     restart: unless-stopped
 
 volumes:
-  db-data:
+  mysql_data: {}

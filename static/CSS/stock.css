@@ -1,14 +1,460 @@
-body { font-family: Arial, sans-serif; margin: 20px; }
-.row { display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
-.card { padding:14px; border:1px solid #eee; border-radius:10px; min-width:260px; }
-.muted { color:#666; font-size:12px; }
-.controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin: 12px 0; }
-select, button, input { padding:8px 10px; border:1px solid #ddd; border-radius:8px; background:white; }
-#chart_wrap { width:100%; height:560px; }
-.profile { display:flex; gap:10px; align-items:center; margin: 0 0 12px; }
-.avatar { width:40px; height:40px; border-radius:50%; object-fit:cover; border:1px solid #eee; }
-.pname { font-weight:600; }
-.danger { color:#b91c1c; }
-.pnlPlus  { color: #2ecc71; font-weight: 600; }
-.pnlMinus { color: #ff5c5c; font-weight: 600; }
-.pnl0     { color: #9aa4b2; }
+/* /static/css/stock.css — полный код (эстетично + сильная иерархия + акцент на профиль)
+   Важно: блок профиля (#profile) заполняется JS. Этот CSS поддерживает два варианта:
+   1) “семантический” (если ты добавишь классы .profile__name/.profile__meta/.profile__cash)
+   2) “без классов” — пытается красиво оформить первые строки/кнопку/числа по универсальным селекторам.
+
+   clamp() для адаптивной типографики [web:156]
+   tabular-nums для ровных финансовых цифр [web:180]
+*/
+
+/* ===== Fonts ===== */
+@font-face{
+  font-family:"Inter Tight";
+  font-style:normal;
+  font-display:swap;
+  font-weight:400;
+  src:
+    url("https://cdn.jsdelivr.net/fontsource/fonts/inter-tight@latest/latin-400-normal.woff2") format("woff2"),
+    url("https://cdn.jsdelivr.net/fontsource/fonts/inter-tight@latest/latin-400-normal.woff") format("woff");
+} /* Fontsource CDN пример [web:12] */
+
+@font-face{
+  font-family:"Inter Tight Variable";
+  font-style:normal;
+  font-display:swap;
+  font-weight:100 900;
+  src:
+    url("https://cdn.jsdelivr.net/fontsource/fonts/inter-tight:vf@latest/latin-wght-normal.woff2") format("woff2-variations");
+} /* Fontsource CDN (variable) [web:12] */
+
+/* ===== Theme / type scale ===== */
+:root{
+  /* Background */
+  --bgTop:#060815;
+  --bgMid:#070A12;
+  --bgBot:#05060C;
+
+  /* Text */
+  --text: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.70);
+  --faint: rgba(255,255,255,.56);
+
+  /* Surfaces */
+  --stroke: rgba(255,255,255,.14);
+  --stroke2: rgba(255,255,255,.10);
+
+  --glassTop: rgba(255,255,255,.12);
+  --glassBot: rgba(255,255,255,.06);
+
+  --shadow: 0 18px 70px rgba(0,0,0,.55);
+  --shadowSoft: 0 14px 40px rgba(0,0,0,.35);
+
+  --r: 18px;
+
+  /* Accents */
+  --accentA: #6D5BFF;
+  --accentB: #22D3EE;
+  --goodA: #34D399;
+  --badA: #FB7185;
+  --badB: #F97316;
+
+  /* Fluid typography scale */
+  --fs-caption: clamp(12px, 0.55vw + 10px, 13px); /* [web:156] */
+  --fs-label:   clamp(13px, 0.55vw + 12px, 14px); /* [web:156] */
+  --fs-body:    clamp(15px, 0.70vw + 12px, 16px); /* [web:156] */
+  --fs-sub:     clamp(16px, 0.95vw + 13px, 18px); /* [web:156] */
+  --fs-title:   clamp(24px, 2.2vw + 14px, 34px);  /* [web:156] */
+
+  /* Tracking */
+  --ls-title: -0.035em;
+  --ls-sub:   -0.018em;
+  --ls-body:   0.010em;
+  --ls-cap:    0.090em; /* только для коротких капшенов */
+}
+
+*{ box-sizing:border-box; }
+html, body{ height:100%; }
+
+body{
+  margin:0;
+  padding: 16px;
+  max-width: 1040px;
+  margin-inline: auto;
+
+  color: var(--text);
+  background:
+    radial-gradient(900px 520px at 12% 10%, rgba(109,91,255,.38), transparent 60%),
+    radial-gradient(900px 520px at 92% 18%, rgba(34,211,238,.28), transparent 60%),
+    radial-gradient(900px 520px at 70% 88%, rgba(52,211,153,.18), transparent 55%),
+    radial-gradient(1100px 650px at 50% 45%, rgba(255,255,255,.06), transparent 62%),
+    linear-gradient(180deg, var(--bgTop) 0%, var(--bgMid) 55%, var(--bgBot) 100%);
+
+  font-family: "Inter Tight Variable","Inter Tight",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  font-size: var(--fs-body);
+  line-height: 1.48;
+  letter-spacing: var(--ls-body);
+  font-optical-sizing: auto;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Links ===== */
+a{
+  color: rgba(255,255,255,.86);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-cap);
+  text-transform: uppercase;
+
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+}
+a:hover{
+  border-color: rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+}
+
+/* ===== Page title ===== */
+h2{
+  margin: 10px 0 12px;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, "Inter Tight Variable", "Inter Tight", Arial, sans-serif;
+  font-weight: 700;
+  font-size: var(--fs-title);
+  line-height: 1.08;
+  letter-spacing: var(--ls-title);
+  text-shadow: 0 18px 50px rgba(0,0,0,.55);
+}
+
+/* ===== Generic text helpers ===== */
+.muted{
+  color: var(--muted);
+  font-size: var(--fs-label);
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+}
+
+b{
+  font-weight: 760;
+  letter-spacing: var(--ls-sub);
+}
+
+/* ===== Profile (АКЦЕНТ) ===== */
+#profile.profile{
+  margin: 12px 0 16px;
+  padding: 14px 14px;
+
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.18);
+  background:
+    radial-gradient(520px 220px at 18% 10%, rgba(34,211,238,.22), transparent 55%),
+    radial-gradient(520px 220px at 85% 10%, rgba(109,91,255,.22), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.05));
+  box-shadow: 0 18px 70px rgba(0,0,0,.55);
+  overflow: hidden;
+  position: relative;
+}
+
+#profile.profile::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:
+    radial-gradient(420px 240px at 25% 0%, rgba(109,91,255,.20), transparent 60%),
+    radial-gradient(420px 240px at 92% 10%, rgba(34,211,238,.15), transparent 60%);
+  filter: blur(18px);
+  opacity: .85;
+  pointer-events:none;
+}
+
+@supports ((backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px))){
+  #profile.profile{
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+#profile.profile > *{ position: relative; z-index: 1; }
+
+/* Вариант А (рекомендуемый): если JS добавляет классы */
+#profile .profile__top{
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+#profile .profile__name{
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, "Inter Tight Variable","Inter Tight", Arial, sans-serif;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+  font-size: clamp(16px, 1.1vw + 12px, 18px);
+  line-height: 1.08;
+}
+
+#profile .profile__meta{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  color: rgba(255,255,255,.74);
+  font-size: var(--fs-caption);
+}
+
+#profile .pill,
+#profile .profile__pill{
+  display:inline-flex;
+  align-items:center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.82);
+  letter-spacing: 0.02em;
+}
+
+#profile .profile__cash{
+  display:flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,.10);
+}
+
+#profile .profile__cash .label{
+  color: rgba(255,255,255,.66);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-cap);
+  text-transform: uppercase;
+}
+
+#profile .profile__cash .value{
+  font-weight: 950;
+  font-size: clamp(18px, 2.4vw + 10px, 28px);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums; /* [web:180] */
+  background: linear-gradient(90deg, rgba(34,211,238,.95), rgba(109,91,255,.95));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Кнопка “Выйти” в профиле */
+#profile button,
+#profile .profile__logout{
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.92);
+  font-weight: 850;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* Вариант Б (без классов): “умные” дефолты под твою текущую верстку из скрина */
+#profile.profile{
+  font-variant-numeric: tabular-nums; /* чтобы cash/id выглядели аккуратно [web:180] */
+}
+
+#profile.profile > div:first-child{
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, "Inter Tight Variable","Inter Tight", Arial, sans-serif;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+  font-size: clamp(16px, 1.1vw + 12px, 18px);
+}
+
+#profile.profile b{
+  font-weight: 800;
+}
+
+#profile.profile button{
+  margin-top: 8px;
+}
+
+/* Если где-то выводишь “Cash: 10000” текстом, выделим число градиентом */
+#profile.profile{
+  --cash-grad: linear-gradient(90deg, rgba(34,211,238,.95), rgba(109,91,255,.95));
+}
+
+/* ===== Cards ===== */
+.card{
+  position: relative;
+  border-radius: var(--r);
+  border: 1px solid var(--stroke);
+  background: linear-gradient(180deg, var(--glassTop), var(--glassBot));
+  box-shadow: var(--shadowSoft);
+  padding: 14px;
+  overflow: hidden;
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:
+    radial-gradient(420px 240px at 18% 10%, rgba(109,91,255,.18), transparent 60%),
+    radial-gradient(420px 240px at 92% 10%, rgba(34,211,238,.12), transparent 60%);
+  pointer-events:none;
+  filter: blur(18px);
+  opacity: .75;
+}
+
+@supports ((backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px))){
+  .card{
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+.card > *{ position: relative; z-index: 1; }
+.card > div{ margin: 7px 0; }
+
+/* “Сделка” (у тебя inline style font-weight:600) — делаем подзаголовок */
+.card > div[style*="font-weight:600"]{
+  font-size: var(--fs-sub);
+  font-weight: 820;
+  letter-spacing: var(--ls-sub);
+  margin-bottom: 10px !important;
+}
+
+/* Ровные цифры в полях/котировках */
+#last, #myQty, #tradeQty{
+  font-variant-numeric: tabular-nums; /* [web:180] */
+  letter-spacing: 0.01em;
+}
+
+/* ===== Layout blocks ===== */
+.row{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin: 10px 0 14px;
+}
+
+/* ===== Controls toolbar ===== */
+.controls{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  align-items: center;
+
+  margin: 12px 0;
+  padding: 12px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--stroke2);
+  background: rgba(255,255,255,.05);
+  box-shadow: var(--shadowSoft);
+}
+
+label{
+  display:flex;
+  gap: 8px;
+  align-items: center;
+
+  font-size: var(--fs-label);
+  font-weight: 650;
+  color: rgba(255,255,255,.86);
+  letter-spacing: 0.03em;
+}
+
+input[type="number"], select{
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(10, 12, 22, .55);
+  color: rgba(255,255,255,.92);
+  outline: none;
+
+  font-size: var(--fs-body);
+  letter-spacing: 0.01em;
+}
+
+input[type="number"]:focus, select:focus{
+  border-color: rgba(34,211,238,.50);
+  box-shadow: 0 0 0 4px rgba(34,211,238,.16);
+}
+
+/* ===== Buttons (CTA hierarchy) ===== */
+button{
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.14);
+  color: rgba(255,255,255,.92);
+  background: rgba(255,255,255,.06);
+
+  font-size: var(--fs-label);
+  font-weight: 880;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+  box-shadow: 0 14px 36px rgba(0,0,0,.40);
+  transition: transform .10s ease, filter .12s ease, box-shadow .12s ease;
+}
+
+button:hover{
+  filter: brightness(1.06);
+  box-shadow: 0 18px 44px rgba(0,0,0,.50);
+}
+button:active{
+  transform: translateY(1px);
+  box-shadow: 0 10px 28px rgba(0,0,0,.40);
+}
+button:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(109,91,255,.22), 0 18px 44px rgba(0,0,0,.50);
+}
+
+#buyBtn{
+  border-color: rgba(52,211,153,.35);
+  background: linear-gradient(135deg, rgba(52,211,153,.30), rgba(34,211,238,.18));
+}
+
+#sellBtn{
+  border-color: rgba(251,113,133,.35);
+  background: linear-gradient(135deg, rgba(251,113,133,.26), rgba(249,115,22,.16));
+}
+
+#reloadBtn{
+  border-color: rgba(109,91,255,.35);
+  background: linear-gradient(135deg, rgba(109,91,255,.28), rgba(34,211,238,.12));
+}
+
+/* ===== Chart container ===== */
+#chart_wrap{
+  margin: 12px 0 18px;
+  padding: 10px;
+  border-radius: var(--r);
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.05);
+  box-shadow: var(--shadowSoft);
+  width: 100%;
+  min-height: 340px;
+}
+
+@supports ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))){
+  #chart_wrap{
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
+
+/* ===== Desktop ===== */
+@media (min-width: 820px){
+  body{ padding: 22px; }
+  .row{ grid-template-columns: 1fr 1fr; gap: 14px; }
+  #chart_wrap{ min-height: 460px; }
+}
