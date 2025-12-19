@@ -1,0 +1,190 @@
+/* Inter Tight (webfont) + Century Gothic (системный) */
+@font-face {
+  font-family: "Inter Tight";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src:
+    url("https://cdn.jsdelivr.net/fontsource/fonts/inter-tight@latest/latin-400-normal.woff2") format("woff2"),
+    url("https://cdn.jsdelivr.net/fontsource/fonts/inter-tight@latest/latin-400-normal.woff") format("woff");
+}
+
+:root{
+  --bg1:#f6f7fb;
+  --bg2:#eef2ff;
+
+  --card: rgba(255,255,255,.86);
+  --stroke: rgba(15,23,42,.10);
+  --shadow: 0 14px 40px rgba(2,6,23,.10);
+
+  --text:#0f172a;
+  --muted: rgba(15,23,42,.64);
+
+  --primary:#2563eb;
+  --primary2:#1d4ed8;
+
+  --r: 18px;
+}
+
+*{ box-sizing:border-box; }
+
+html, body { height:100%; }
+
+body{
+  margin:0;
+  color:var(--text);
+  background:
+    radial-gradient(900px 520px at 15% 10%, var(--bg2), transparent 60%),
+    radial-gradient(800px 520px at 90% 25%, #e0f2fe, transparent 55%),
+    linear-gradient(180deg, var(--bg1), #ffffff 65%);
+  font-family: "Inter Tight", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Лэйаут страницы */
+body{
+  padding: 16px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+/* Типографика */
+h1, h2, h3{
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, "Inter Tight", Arial, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+h2{
+  margin: 18px 0 6px;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.muted{
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+/* Карточки */
+.card{
+  background: var(--card);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  padding: 14px;
+}
+
+/* Профильная строка */
+#profile{
+  padding: 6px 2px;
+}
+
+/* Таблица: по умолчанию мобильная (скролл по горизонтали) */
+#tbl{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 10px;
+
+  /* Важно для мобильных: не ломать колонки слишком узко */
+  min-width: 720px;
+  background: var(--card);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r);
+  overflow: hidden; /* визуально, на некоторых браузерах */
+  box-shadow: var(--shadow);
+}
+
+/* Обёртка-скроллер без изменения HTML:
+   делаем body «окном», внутри которого таблица может скроллиться */
+body{
+  overflow-x: hidden;
+}
+#tbl{
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Заголовки */
+#tbl thead{
+  background: rgba(255,255,255,.92);
+}
+
+#tbl th, #tbl td{
+  padding: 12px 12px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--stroke);
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+/* Sticky header */
+#tbl thead th{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: rgba(255,255,255,.95);
+  box-shadow: 0 1px 0 rgba(15,23,42,.06);
+} /* sticky header pattern [web:32][web:26] */
+
+/* Ряды */
+#tbl tbody tr{
+  background: transparent;
+}
+
+#tbl tbody tr:hover{
+  background: rgba(37,99,235,.06);
+}
+
+#tbl tbody tr:last-child td{
+  border-bottom: 0;
+}
+
+/* Числа удобнее читать справа (last/оборот) */
+#tbl th:nth-child(3), #tbl td:nth-child(3),
+#tbl th:nth-child(4), #tbl td:nth-child(4){
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Компактные кликабельные элементы (если появятся ссылки в таблице) */
+a{
+  color: var(--primary2);
+  text-decoration: none;
+}
+a:hover{ text-decoration: underline; }
+
+/* Чуть просторнее на больших экранах */
+@media (min-width: 768px){
+  body{ padding: 22px; }
+  .card{ padding: 16px; }
+  h2{ font-size: 22px; }
+}
+
+/* Тёмная тема */
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg1:#0b1220;
+    --bg2:#0b1b3a;
+
+    --card: rgba(15,23,42,.72);
+    --stroke: rgba(148,163,184,.16);
+    --shadow: 0 16px 50px rgba(0,0,0,.35);
+
+    --text:#e5e7eb;
+    --muted: rgba(229,231,235,.70);
+  }
+
+  #tbl thead th{
+    background: rgba(15,23,42,.92);
+    box-shadow: 0 1px 0 rgba(148,163,184,.12);
+  }
+
+  #tbl tbody tr:hover{
+    background: rgba(59,130,246,.14);
+  }
+}
